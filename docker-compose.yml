@@ -1,0 +1,36 @@
+version: "3"
+services:
+  web:
+    build: .
+    container_name: dockerweb
+    ports:
+      - 3333:3333
+    depends_on:
+      - db
+      - lll
+    networks:
+      - dev-network
+  db:
+    image: mongo
+    container_name: dockermongo
+    ports:
+      - 9003:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: testadmin      #初始化数据库用户名
+      MONGO_INITDB_ROOT_PASSWORD: testadmin123   #初始化数据库密码
+      MONGO_INITDB_DATABASE: DOCKER_DB
+    networks:
+      - dev-network
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro #只读
+      - /Users/yagao/Desktop/docker-volumes/mongo:/data/db
+  lll:
+    image: redis:5.0.9
+    container_name: dockerredis
+    networks:
+      - dev-network
+    volumes:
+      - /Users/yagao/Desktop/docker-volumes/redis:/data
+networks:
+  dev-network:
+    driver: bridge

@@ -1,0 +1,24 @@
+{
+  "name": "dockercomposedemo",
+  "version": "1.0.0",
+  "description": "使用docker-compose单机编排node+mongo+redis案例",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chemistwang/dockercomposedemo.git"
+  },
+  "author": "chemistwang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chemistwang/dockercomposedemo/issues"
+  },
+  "homepage": "https://github.com/chemistwang/dockercomposedemo#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "ioredis": "^4.17.3",
+    "mongoose": "^5.9.27"
+  }
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <form action="" id="form_redis">
+        <input type="text" id="input_redis">
+        <button type="submit" id="button_redis">存储数据至redis</button>
+    </form>
+
+    <form action="" id="form_mongo">
+        <input type="text" id="nameInput_mongo" placeholder="请输入姓名">
+        <input type="text" id="contentInput_mongo" placeholder="请输入你要说的话">
+        <button type="submit" id="button_mongo">存储数据至mongodb</button>
+    </form>
+
+</body>
+</html>
+<script>
+
+const URL = 'http://localhost:3333';
+
+//获取redis表单相关元素
+let formRedis = document.getElementById('form_redis');
+let inputRedis = document.getElementById('input_redis');
+let btnRedis = document.getElementById('button_redis');
+
+//获取mongo表单相关元素
+let formMongo = document.getElementById('form_mongo');
+let nameInputMongo = document.getElementById('nameInput_mongo');
+let contentInputMongo = document.getElementById('contentInput_mongo');
+let btnMongo = document.getElementById('button_mongo');
+
+//点击提交至后台redis
+btnRedis.onclick = function() {
+    let value = inputRedis.value;
+
+    if (!value) {
+        alert("value不能为空");
+    } else {
+        fetch(`${URL}/submit`, {
+            method: 'POST',
+            body: JSON.stringify({value}),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        }).then(res => {
+            return res.json();
+        }).then(res => {
+            if (res.success) {
+                alert(res.msg);
+            } else {
+                alert('提交失败');
+            }
+        }).catch(err => {
+            alert(err);
+        })
+    }
+
+    return false;
+}
+
+
+//点击提交至后台mongo
+btnMongo.onclick = function() {
+    let valueName = nameInputMongo.value;
+    let valueContent = contentInputMongo.value;
+
+    if (!valueName || !valueContent) {
+        alert('请输入完整信息！')
+    } else {
+        fetch(`${URL}/mongo`, {
+            method: 'POST',
+            body: JSON.stringify({valueName,valueContent}),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        }).then(res => {
+            return res.json();
+        }).then(res => {
+            if (res.success) {
+                alert(res.msg);
+            } else {
+                alert('提交失败');
+            }
+        }).catch(err => {
+            alert(err);
+        })
+    }
+    return false;
+}
+
+
+
+</script>
