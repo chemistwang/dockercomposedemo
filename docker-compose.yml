@@ -1,36 +1,40 @@
-version: "3"
-services:
-  web:
-    build: .
-    container_name: dockerweb
-    ports:
-      - 3333:3333
-    depends_on:
-      - db
-      - lll
-    networks:
-      - dev-network
-  db:
+version: "3"                    # docker-compose语法版本号
+services:                       # 服务组
+  yournodename:                 # 自定义web服务名
+    build: .                    # 构建当前路径下的Dockerfile
+    image: yourserviceimage     # 自己构建的服务镜像名
+    container_name: dockernode   # 自己构建的容器名
+    restart: always             # 开机自启动
+    ports:                      # 暴露宿主机端口
+      - 3333:3333               # 容器内部3333映射到宿主机3333端口
+    depends_on:                 # 容器依赖，会先启用依赖的容器
+      - yourmongoname           # 依赖名要与下面自定义的服务名保持一致
+      - yourredisname
+    networks:                   # 容器网络
+      - yournetworkname
+  yourmongoname:                # 自定义mongo服务名
     image: mongo
     container_name: dockermongo
-    ports:
-      - 9003:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: testadmin      #初始化数据库用户名
-      MONGO_INITDB_ROOT_PASSWORD: testadmin123   #初始化数据库密码
-      MONGO_INITDB_DATABASE: DOCKER_DB
+    restart: always
+    ports:    
+      - 9003:27017              # 暴露端口
+    environment:                # 若开启数据库验证，则需要配置此选项
+      MONGO_INITDB_ROOT_USERNAME: yourMongoInitUsername      #初始化数据库用户名
+      MONGO_INITDB_ROOT_PASSWORD: yourMongoInitPassword      #初始化数据库密码
+      MONGO_INITDB_DATABASE: DOCKER_DB          # 初始化数据库
     networks:
-      - dev-network
-    volumes:
+      - yournetworkname
+    volumes:                    # 挂载数据卷（宿主机绝对路径:容器绝对路径）
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro #只读
-      - /Users/yagao/Desktop/docker-volumes/mongo:/data/db
-  lll:
-    image: redis:5.0.9
+      - /p/a/t/h:/data/db   
+  yourredisname:                # 自定义redis服务名
+    image: redis:5.0.9    
     container_name: dockerredis
+    restart: always 
     networks:
-      - dev-network
+      - yournetworkname
     volumes:
-      - /Users/yagao/Desktop/docker-volumes/redis:/data
-networks:
-  dev-network:
-    driver: bridge
+      - /p/a/t/h:/data
+networks:                       # 容器网络
+  yournetworkname:              # 自定义容器网络名
+    driver: bridge              # 网络类型
