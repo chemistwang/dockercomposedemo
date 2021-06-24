@@ -18,8 +18,9 @@
 ├── init-mongo.js   # 初始化mongo数据库
 ├── package-lock.json
 ├── package.json
-└── public
-    └── index.html  # 静态页面
+├── public
+│   └── index.html # 静态页面
+└── wait-for-it.sh # 等候脚本
 ```
 
 ### 2. 启动应用
@@ -46,4 +47,4 @@ docker-compose up -d --build # --build 不会使用docker缓存
 
 - `Dockerfile`中基础镜像使用 `node:12.16-slim`,精简版的node环境,可以使镜像包的体积缩小
 - 连接`mongo`和`redis`的时候其连接名必须和`docker-compose`中的编排的服务文件名`(eg: yourmongoname, yourredisname)`保持一致
-- `wait-for-it.sh` 是为了防止 `node` 服务先于 `mongo` 启动，导致 `node` 连接数据库报错
+- `wait-for-it.sh` 是为了防止 `node` 服务先于 `mongo` 启动，导致 `node` 连接数据库报错 [官方说明](https://docs.docker.com/compose/startup-order/)
