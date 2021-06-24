@@ -26,7 +26,7 @@ services:                       # 服务组
     networks:
       - yournetworkname
     volumes:                    # 挂载数据卷（宿主机绝对路径:容器绝对路径）
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro #只读
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro #只读,初始化数据库用户名密码
       - /p/a/t/h:/data/db       # /p/a/t/h 为服务器挂载卷路径
   yourredisname:                # 自定义redis服务名
     image: redis:5.0.9    
