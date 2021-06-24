@@ -10,10 +10,11 @@ services:                       # 服务组
     depends_on:                 # 容器依赖，会先启用依赖的容器
       - yourmongoname           # 依赖名要与下面自定义的服务名保持一致
       - yourredisname
+    command: ["./wait-for-it.sh", "mongo:27017", "--", "node", "app.js"] # 等待mongo启动之后，再启动node服务
     networks:                   # 容器网络
       - yournetworkname
   yourmongoname:                # 自定义mongo服务名
-    image: mongo
+    image: mongo:4.2.6
     container_name: dockermongo
     restart: always
     ports:    
@@ -26,7 +27,7 @@ services:                       # 服务组
       - yournetworkname
     volumes:                    # 挂载数据卷（宿主机绝对路径:容器绝对路径）
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro #只读
-      - /p/a/t/h:/data/db   
+      - /p/a/t/h:/data/db       # /p/a/t/h 为服务器挂载卷路径
   yourredisname:                # 自定义redis服务名
     image: redis:5.0.9    
     container_name: dockerredis
@@ -34,7 +35,7 @@ services:                       # 服务组
     networks:
       - yournetworkname
     volumes:
-      - /p/a/t/h:/data
+      - /p/a/t/h:/data          # /p/a/t/h 为服务器挂载卷路径
 networks:                       # 容器网络
   yournetworkname:              # 自定义容器网络名
     driver: bridge              # 网络类型
